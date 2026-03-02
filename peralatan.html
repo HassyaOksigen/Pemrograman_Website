@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peralatan – TANDOOR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="page-equipment">
+
+  <!-- ===== NAVBAR ===== -->
+  <header class="navbar">
+    <div class="container navbar__inner">
+      <div class="navbar__logo">
+        <img src="img/logo.png" alt="Tandoor Logo" class="logo-img" />
+      </div>
+      <nav class="navbar__links">
+        <a href="index.html" class="nav-link">Beranda</a>
+        <a href="peralatan.html" class="nav-link active">Peralatan</a>
+        <a href="dashboard.html" class="nav-link">Penyewaan Saya</a>
+        <a href="#" class="nav-link">Hubungi Kami</a>
+      </nav>
+      <div class="navbar__auth">
+        <a href="#" class="btn btn--ghost">Masuk</a>
+        <a href="#" class="btn btn--primary">Daftar</a>
+      </div>
+      <button class="navbar__hamburger" id="navHamburger" aria-label="Buka menu" aria-expanded="false">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== EQUIPMENT PAGE ===== -->
+  <main class="equip-page">
+    <div class="container">
+
+      <!-- Page header -->
+      <div class="equip-header">
+        <h1 class="equip-header__title">Cari Peralatan</h1>
+        <p class="equip-header__subtitle">Pilih alat pertanian yang sesuai dengan kebutuhan pekerjaan Anda.</p>
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="equip-filters">
+        <button class="filter-btn filter-btn--active">Semua</button>
+        <button class="filter-btn">Traktor</button>
+        <button class="filter-btn">Bajak</button>
+        <button class="filter-btn">Cultivator</button>
+      </div>
+
+      <!-- Equipment grid -->
+      <div class="equip-grid">
+
+        <!-- Card 1 -->
+        <div class="equip-card">
+          <div class="equip-card__img-wrap">
+            <img src="img/peralatan.png" alt="John Deere 5075E Tractor" class="equip-card__img" />
+            <span class="equip-card__badge">Tersedia</span>
+          </div>
+          <div class="equip-card__body">
+            <div class="equip-card__top">
+              <h3 class="equip-card__name">John Deere 5075E Tractor</h3>
+              <span class="equip-card__price">10Rp/hari</span>
+            </div>
+            <span class="equip-card__category">Traktor</span>
+            <p class="equip-card__desc">Traktor pertanian serbaguna 110 HP (81 kW) 4WD dengan High-Pressure Common Rail</p>
+            <div class="equip-card__tags">
+              <span class="equip-tag"><i class="fa-solid fa-calendar-days"></i> Rental harian</span>
+              <span class="equip-tag"><i class="fa-solid fa-truck"></i> Pengiriman</span>
+            </div>
+            <a href="detail.html" class="btn btn--equip">Lihat Detail</a>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="equip-card">
+          <div class="equip-card__img-wrap">
+            <img src="img/peralatan.png" alt="John Deere 5075E Tractor" class="equip-card__img" />
+            <span class="equip-card__badge">Tersedia</span>
+          </div>
+          <div class="equip-card__body">
+            <div class="equip-card__top">
+              <h3 class="equip-card__name">John Deere 5075E Tractor</h3>
+              <span class="equip-card__price">10Rp/hari</span>
+            </div>
+            <span class="equip-card__category">Traktor</span>
+            <p class="equip-card__desc">Traktor pertanian serbaguna 110 HP (81 kW) 4WD dengan High-Pressure Common Rail</p>
+            <div class="equip-card__tags">
+              <span class="equip-tag"><i class="fa-solid fa-calendar-days"></i> Rental harian</span>
+              <span class="equip-tag"><i class="fa-solid fa-truck"></i> Pengiriman</span>
+            </div>
+            <a href="detail.html" class="btn btn--equip">Lihat Detail</a>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="equip-card">
+          <div class="equip-card__img-wrap">
+            <img src="img/peralatan.png" alt="John Deere 5075E Tractor" class="equip-card__img" />
+            <span class="equip-card__badge">Tersedia</span>
+          </div>
+          <div class="equip-card__body">
+            <div class="equip-card__top">
+              <h3 class="equip-card__name">John Deere 5075E Tractor</h3>
+              <span class="equip-card__price">10Rp/hari</span>
+            </div>
+            <span class="equip-card__category">Traktor</span>
+            <p class="equip-card__desc">Traktor pertanian serbaguna 110 HP (81 kW) 4WD dengan High-Pressure Common Rail</p>
+            <div class="equip-card__tags">
+              <span class="equip-tag"><i class="fa-solid fa-calendar-days"></i> Rental harian</span>
+              <span class="equip-tag"><i class="fa-solid fa-truck"></i> Pengiriman</span>
+            </div>
+            <a href="detail.html" class="btn btn--equip">Lihat Detail</a>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="equip-card">
+          <div class="equip-card__img-wrap">
+            <img src="img/peralatan.png" alt="John Deere 5075E Tractor" class="equip-card__img" />
+            <span class="equip-card__badge">Tersedia</span>
+          </div>
+          <div class="equip-card__body">
+            <div class="equip-card__top">
+              <h3 class="equip-card__name">John Deere 5075E Tractor</h3>
+              <span class="equip-card__price">10Rp/hari</span>
+            </div>
+            <span class="equip-card__category">Traktor</span>
+            <p class="equip-card__desc">Traktor pertanian serbaguna 110 HP (81 kW) 4WD dengan High-Pressure Common Rail</p>
+            <div class="equip-card__tags">
+              <span class="equip-tag"><i class="fa-solid fa-calendar-days"></i> Rental harian</span>
+              <span class="equip-tag"><i class="fa-solid fa-truck"></i> Pengiriman</span>
+            </div>
+            <a href="detail.html" class="btn btn--equip">Lihat Detail</a>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="equip-card">
+          <div class="equip-card__img-wrap">
+            <img src="img/peralatan.png" alt="John Deere 5075E Tractor" class="equip-card__img" />
+            <span class="equip-card__badge">Tersedia</span>
+          </div>
+          <div class="equip-card__body">
+            <div class="equip-card__top">
+              <h3 class="equip-card__name">John Deere 5075E Tractor</h3>
+              <span class="equip-card__price">10Rp/hari</span>
+            </div>
+            <span class="equip-card__category">Traktor</span>
+            <p class="equip-card__desc">Traktor pertanian serbaguna 110 HP (81 kW) 4WD dengan High-Pressure Common Rail</p>
+            <div class="equip-card__tags">
+              <span class="equip-tag"><i class="fa-solid fa-calendar-days"></i> Rental harian</span>
+              <span class="equip-tag"><i class="fa-solid fa-truck"></i> Pengiriman</span>
+            </div>
+            <a href="detail.html" class="btn btn--equip">Lihat Detail</a>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="equip-card">
+          <div class="equip-card__img-wrap">
+            <img src="img/peralatan.png" alt="John Deere 5075E Tractor" class="equip-card__img" />
+            <span class="equip-card__badge">Tersedia</span>
+          </div>
+          <div class="equip-card__body">
+            <div class="equip-card__top">
+              <h3 class="equip-card__name">John Deere 5075E Tractor</h3>
+              <span class="equip-card__price">10Rp/hari</span>
+            </div>
+            <span class="equip-card__category">Traktor</span>
+            <p class="equip-card__desc">Traktor pertanian serbaguna 110 HP (81 kW) 4WD dengan High-Pressure Common Rail</p>
+            <div class="equip-card__tags">
+              <span class="equip-tag"><i class="fa-solid fa-calendar-days"></i> Rental harian</span>
+              <span class="equip-tag"><i class="fa-solid fa-truck"></i> Pengiriman</span>
+            </div>
+            <a href="detail.html" class="btn btn--equip">Lihat Detail</a>
+          </div>
+        </div>
+
+        <!-- Card 7 -->
+        <div class="equip-card">
+          <div class="equip-card__img-wrap">
+            <img src="img/peralatan.png" alt="John Deere 5075E Tractor" class="equip-card__img" />
+            <span class="equip-card__badge">Tersedia</span>
+          </div>
+          <div class="equip-card__body">
+            <div class="equip-card__top">
+              <h3 class="equip-card__name">John Deere 5075E Tractor</h3>
+              <span class="equip-card__price">10Rp/hari</span>
+            </div>
+            <span class="equip-card__category">Traktor</span>
+            <p class="equip-card__desc">Traktor pertanian serbaguna 110 HP (81 kW) 4WD dengan High-Pressure Common Rail</p>
+            <div class="equip-card__tags">
+              <span class="equip-tag"><i class="fa-solid fa-calendar-days"></i> Rental harian</span>
+              <span class="equip-tag"><i class="fa-solid fa-truck"></i> Pengiriman</span>
+            </div>
+            <a href="detail.html" class="btn btn--equip">Lihat Detail</a>
+          </div>
+        </div>
+
+        <!-- Card 8 -->
+        <div class="equip-card">
+          <div class="equip-card__img-wrap">
+            <img src="img/peralatan.png" alt="John Deere 5075E Tractor" class="equip-card__img" />
+            <span class="equip-card__badge">Tersedia</span>
+          </div>
+          <div class="equip-card__body">
+            <div class="equip-card__top">
+              <h3 class="equip-card__name">John Deere 5075E Tractor</h3>
+              <span class="equip-card__price">10Rp/hari</span>
+            </div>
+            <span class="equip-card__category">Traktor</span>
+            <p class="equip-card__desc">Traktor pertanian serbaguna 110 HP (81 kW) 4WD dengan High-Pressure Common Rail</p>
+            <div class="equip-card__tags">
+              <span class="equip-tag"><i class="fa-solid fa-calendar-days"></i> Rental harian</span>
+              <span class="equip-tag"><i class="fa-solid fa-truck"></i> Pengiriman</span>
+            </div>
+            <a href="detail.html" class="btn btn--equip">Lihat Detail</a>
+          </div>
+        </div>
+
+        <!-- Card 9 -->
+        <div class="equip-card">
+          <div class="equip-card__img-wrap">
+            <img src="img/peralatan.png" alt="John Deere 5075E Tractor" class="equip-card__img" />
+            <span class="equip-card__badge">Tersedia</span>
+          </div>
+          <div class="equip-card__body">
+            <div class="equip-card__top">
+              <h3 class="equip-card__name">John Deere 5075E Tractor</h3>
+              <span class="equip-card__price">10Rp/hari</span>
+            </div>
+            <span class="equip-card__category">Traktor</span>
+            <p class="equip-card__desc">Traktor pertanian serbaguna 110 HP (81 kW) 4WD dengan High-Pressure Common Rail</p>
+            <div class="equip-card__tags">
+              <span class="equip-tag"><i class="fa-solid fa-calendar-days"></i> Rental harian</span>
+              <span class="equip-tag"><i class="fa-solid fa-truck"></i> Pengiriman</span>
+            </div>
+            <a href="detail.html" class="btn btn--equip">Lihat Detail</a>
+          </div>
+        </div>
+
+      </div><!-- /.equip-grid -->
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__col footer__col--brand">
+          <img src="img/logo.png" alt="Tandoor Logo" class="logo-img logo-img--footer" />
+          <p class="footer__tagline">
+            Platform penyewaan alat pertanian yang praktis, aman, dan terpercaya untuk petani Indonesia.
+          </p>
+          <div class="footer__socials">
+            <a href="#" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="social-btn" aria-label="Twitter/X"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="social-btn" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__heading">Navigasi</h4>
+          <ul class="footer__list">
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="peralatan.html">Peralatan</a></li>
+            <li><a href="#">Penyewaan Saya</a></li>
+            <li><a href="#">Hubungi Kami</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__heading">Layanan</h4>
+          <ul class="footer__list">
+            <li><a href="#">Sewa Alat</a></li>
+            <li><a href="#">Jadwal Penyewaan</a></li>
+            <li><a href="#">Panduan Penggunaan</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__heading">Kontak</h4>
+          <ul class="footer__list footer__list--contact">
+            <li><i class="fa-solid fa-envelope"></i><span>halo@tandoor.id</span></li>
+            <li><i class="fa-solid fa-phone"></i><span>+62 812-3456-7890</span></li>
+            <li><i class="fa-solid fa-location-dot"></i><span>Jl. Pertanian No. 12,<br/>Bogor, Jawa Barat</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__divider"></div>
+      <div class="footer__bottom">
+        <p class="footer__copy">&copy; 2026 Tandoor. Seluruh hak cipta dilindungi.</p>
+        <div class="footer__bottom-links">
+          <a href="#">Kebijakan Privasi</a>
+          <a href="#">Syarat &amp; Ketentuan</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
+  <script src="js/peralatan.js"></script>
+
+</body>
+</html>

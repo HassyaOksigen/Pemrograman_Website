@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – TANDOOR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="page-equipment">
+
+  <!-- ===== NAVBAR ===== -->
+  <header class="navbar">
+    <div class="container navbar__inner">
+      <div class="navbar__logo">
+        <img src="img/logo.png" alt="Tandoor Logo" class="logo-img" />
+      </div>
+      <nav class="navbar__links">
+        <a href="index.html" class="nav-link">Beranda</a>
+        <a href="peralatan.html" class="nav-link">Peralatan</a>
+        <a href="dashboard.html" class="nav-link active">Penyewaan Saya</a>
+        <a href="#" class="nav-link">Hubungi Kami</a>
+      </nav>
+      <div class="navbar__user">
+        <span class="navbar__username">Linsky</span>
+      </div>
+      <button class="navbar__hamburger" id="navHamburger" aria-label="Buka menu" aria-expanded="false">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== DASHBOARD ===== -->
+  <main class="dash-page">
+    <div class="container">
+
+      <!-- Page heading -->
+      <div class="dash-header">
+        <h1 class="dash-header__title">Dashboard Penyewa</h1>
+        <p class="dash-header__subtitle">Kelola penyewaan alat dan profil Anda</p>
+      </div>
+
+      <!-- Tab bar -->
+      <div class="dash-tabs" role="tablist">
+        <button class="dash-tab" role="tab" data-tab="penyewaan" aria-selected="false">
+          <i class="fa-regular fa-clock"></i> Penyewaan Saya
+        </button>
+        <button class="dash-tab" role="tab" data-tab="permintaan" aria-selected="false">
+          <i class="fa-regular fa-file-lines"></i> Permintaan Sewa
+        </button>
+        <button class="dash-tab" role="tab" data-tab="profil" aria-selected="false">
+          <i class="fa-regular fa-user"></i> Profil
+        </button>
+      </div>
+
+      <!-- ===== TAB: PENYEWAAN SAYA ===== -->
+      <div class="dash-panel" id="tab-penyewaan">
+
+        <!-- Active rentals -->
+        <h2 class="dash-section-title">Penyewaan Aktif</h2>
+        <div class="rental-active-grid">
+
+          <div class="rental-card">
+            <img src="img/peralatan.png" alt="John Deere 5075E" class="rental-card__img" />
+            <div class="rental-card__body">
+              <div class="rental-card__title-row">
+                <span class="rental-card__name">John Deere 5075E Tractor</span>
+                <span class="status-badge status-badge--active">Aktif</span>
+              </div>
+              <p class="rental-card__date">10-01-2025 sampai 17-01-2025</p>
+              <p class="rental-card__price">10Rp</p>
+              <div class="rental-card__actions">
+                <button class="btn btn--outline-green">Perpanjang</button>
+                <button class="btn btn--outline-red">Kembalikan</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="rental-card">
+            <img src="img/peralatan.png" alt="John Deere 5075E" class="rental-card__img" />
+            <div class="rental-card__body">
+              <div class="rental-card__title-row">
+                <span class="rental-card__name">John Deere 5075E Tractor</span>
+                <span class="status-badge status-badge--active">Aktif</span>
+              </div>
+              <p class="rental-card__date">10-01-2025 sampai 17-01-2025</p>
+              <p class="rental-card__price">10Rp</p>
+              <div class="rental-card__actions">
+                <button class="btn btn--outline-green">Perpanjang</button>
+                <button class="btn btn--outline-red">Kembalikan</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Rental history -->
+        <h2 class="dash-section-title">Riwayat</h2>
+        <div class="history-list">
+
+          <div class="history-item">
+            <p class="history-item__name">Traktor</p>
+            <p class="history-item__meta">Selesai — 15-12-2024 &bull; 3 hari &bull; Rp 100</p>
+          </div>
+
+          <div class="history-item">
+            <p class="history-item__name">Traktor</p>
+            <p class="history-item__meta">Selesai — 15-12-2024 &bull; 3 hari &bull; Rp 100</p>
+          </div>
+
+          <div class="history-item">
+            <p class="history-item__name">Traktor</p>
+            <p class="history-item__meta">Selesai — 15-12-2024 &bull; 3 hari &bull; Rp 100</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ===== TAB: PERMINTAAN SEWA ===== -->
+      <div class="dash-panel" id="tab-permintaan">
+
+        <div class="dash-panel__header">
+          <h2 class="dash-section-title">Permintaan Penyewaan</h2>
+          <a href="peralatan.html" class="btn btn--primary btn--sm">Permintaan Baru</a>
+        </div>
+
+        <div class="request-list">
+
+          <div class="request-item">
+            <img src="img/peralatan.png" alt="John Deere 5075E" class="request-item__img" />
+            <div class="request-item__body">
+              <p class="request-item__name">John Deere 5075E Tractor</p>
+              <p class="request-item__meta">Diajukan untuk 20-01-2025 &bull; Durasi 5 hari</p>
+              <p class="request-item__price">10Rp</p>
+              <button class="btn btn--outline-red btn--sm">Batalkan Permintaan</button>
+            </div>
+            <span class="status-badge status-badge--pending">Menunggu Persetujuan</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ===== TAB: PROFIL ===== -->
+      <div class="dash-panel" id="tab-profil">
+
+        <div class="profil-grid">
+
+          <!-- Informasi personal -->
+          <div class="profil-card">
+            <h3 class="profil-card__title">Informasi</h3>
+            <ul class="profil-info-list">
+              <li>
+                <span class="profil-info-list__icon"><i class="fa-regular fa-user"></i></span>
+                <div>
+                  <p class="profil-info-list__value">John Smith</p>
+                  <p class="profil-info-list__label">Pemilik Lahan</p>
+                </div>
+              </li>
+              <li>
+                <span class="profil-info-list__icon"><i class="fa-regular fa-envelope"></i></span>
+                <div>
+                  <p class="profil-info-list__value">Johns@gmail.com</p>
+                  <p class="profil-info-list__label">Email</p>
+                </div>
+              </li>
+              <li>
+                <span class="profil-info-list__icon"><i class="fa-solid fa-phone"></i></span>
+                <div>
+                  <p class="profil-info-list__value">0986666666</p>
+                  <p class="profil-info-list__label">No. HP</p>
+                </div>
+              </li>
+              <li>
+                <span class="profil-info-list__icon"><i class="fa-solid fa-location-dot"></i></span>
+                <div>
+                  <p class="profil-info-list__value">Tlogosari</p>
+                  <p class="profil-info-list__label">Alamat</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Informasi lahan -->
+          <div class="profil-card">
+            <h3 class="profil-card__title">Informasi Lahan</h3>
+            <ul class="lahan-list">
+              <li>
+                <p class="lahan-list__label">Luas Lahan</p>
+                <p class="lahan-list__value">250 Hektar</p>
+              </li>
+              <li>
+                <p class="lahan-list__label">Tanaman Utama</p>
+                <p class="lahan-list__value">Jagung, Kedelai, Gandum</p>
+              </li>
+              <li>
+                <p class="lahan-list__label">Tipe Pertanian</p>
+                <p class="lahan-list__value">Pertanian Tanaman Pangan</p>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__col footer__col--brand">
+          <img src="img/logo.png" alt="Tandoor Logo" class="logo-img logo-img--footer" />
+          <p class="footer__tagline">
+            Platform penyewaan alat pertanian yang praktis, aman, dan terpercaya untuk petani Indonesia.
+          </p>
+          <div class="footer__socials">
+            <a href="#" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="social-btn" aria-label="Twitter/X"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="social-btn" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__heading">Navigasi</h4>
+          <ul class="footer__list">
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="peralatan.html">Peralatan</a></li>
+            <li><a href="dashboard.html">Penyewaan Saya</a></li>
+            <li><a href="#">Hubungi Kami</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__heading">Layanan</h4>
+          <ul class="footer__list">
+            <li><a href="#">Sewa Alat</a></li>
+            <li><a href="#">Jadwal Penyewaan</a></li>
+            <li><a href="#">Panduan Penggunaan</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__heading">Kontak</h4>
+          <ul class="footer__list footer__list--contact">
+            <li><i class="fa-solid fa-envelope"></i><span>halo@tandoor.id</span></li>
+            <li><i class="fa-solid fa-phone"></i><span>+62 812-3456-7890</span></li>
+            <li><i class="fa-solid fa-location-dot"></i><span>Jl. Pertanian No. 12,<br/>Bogor, Jawa Barat</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__divider"></div>
+      <div class="footer__bottom">
+        <p class="footer__copy">&copy; 2026 Tandoor. Seluruh hak cipta dilindungi.</p>
+        <div class="footer__bottom-links">
+          <a href="#">Kebijakan Privasi</a>
+          <a href="#">Syarat &amp; Ketentuan</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
+  <script src="js/dashboard.js"></script>
+
+</body>
+</html>

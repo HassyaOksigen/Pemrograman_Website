@@ -1,42 +1,390 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk - Tandoor</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TANDOOR - Sewa Alat Pertanian</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="auth-container">
-        <div class="auth-box">
-            <header>
-                <h1 class="brand-title">Masuk</h1>
-                <p>Selamat datang kembali di Tandoor</p>
-            </header>
-            
-            <form>
-                <div class="input-group">
-                    <label>Email</label>
-                    <input type="email" placeholder="Masukkan email Anda" required>
-                </div>
 
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" placeholder="Masukkan kata sandi" required>
-                </div>
-
-                <div class="auth-options">
-                    <label><input type="checkbox"> Ingat saya</label>
-                    <a href="#" class="forgot-link">Lupa kata sandi?</a>
-                </div>
-
-                <button type="submit" class="btn-primary">Masuk</button>
-            </form>
-
-            <div class="divider"><span>atau</span></div>
-
-            <p class="footer-text">Belum punya akun? <a href="daftar.html">Daftar</a></p>
-        </div>
+  <!-- ===== NAVBAR ===== -->
+  <header class="navbar">
+    <div class="container navbar__inner">
+      <div class="navbar__logo">
+        <img src="img/logo.png" alt="Tandoor Logo" class="logo-img" />
+      </div>
+      <nav class="navbar__links">
+        <a href="index.html" class="nav-link active">Beranda</a>
+        <a href="peralatan.html" class="nav-link">Peralatan</a>
+        <a href="dashboard.html" class="nav-link">Penyewaan Saya</a>
+        <button class="nav-link nav-link--btn" id="btnOpenLahan">Hubungi Kami</button>
+      </nav>
+      <div class="navbar__auth">
+        <button class="btn btn--ghost" id="btnOpenLogin">Masuk</button>
+        <button class="btn btn--primary" id="btnOpenRegister">Daftar</button>
+      </div>
+      <button class="navbar__hamburger" id="navHamburger" aria-label="Buka menu" aria-expanded="false">
+        <i class="fa-solid fa-bars"></i>
+      </button>
     </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+      <h1 class="hero__title">Gerakkan Pertanian</h1>
+      <p class="hero__subtitle">
+        Menyewa alat pertanian menjadi semudah memesan<br />
+        layanan online — cepat, transparan, dan efisien.
+      </p>
+      <a href="#" class="btn btn--hero">Mulai Sekarang</a>
+    </div>
+  </section>
+
+  <!-- ===== WHY SECTION ===== -->
+  <section class="why">
+    <div class="why__header">
+      <h2 class="why__title">Mengapa Memilih TANDOOR?</h2>
+      <p class="why__subtitle">
+        Kami memudahkan petani dan pelaku agribisnis mendapatkan akses alat pertanian
+        berkualitas melalui platform penyewaan yang praktis, aman, dan terpercaya.
+      </p>
+    </div>
+
+    <div class="why__grid">
+      <div class="card">
+        <div class="card__icon card__icon--green"><i class="fa-solid fa-leaf"></i></div>
+        <h3 class="card__title">Ramah Lingkungan</h3>
+        <p class="card__desc">
+          Peralatan yang terawat dengan baik membantu mendukung praktik pertanian
+          yang berkelanjutan dan efisien.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card__icon card__icon--yellow"><i class="fa-solid fa-bolt"></i></div>
+        <h3 class="card__title">Efisien &amp; Praktis</h3>
+        <p class="card__desc">
+          Proses penyewaan cepat dan mudah, membantu Anda menghemat waktu serta
+          tenaga di lapangan.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card__icon card__icon--red"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3 class="card__title">Terpercaya</h3>
+        <p class="card__desc">
+          Seluruh peralatan telah melalui proses pemeriksaan dan perawatan rutin untuk
+          memastikan performa optimal di setiap penggunaan.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card__icon card__icon--orange"><i class="fa-solid fa-tractor"></i></div>
+        <h3 class="card__title">Peralatan Lengkap</h3>
+        <p class="card__desc">
+          Berbagai pilihan alat pertanian tersedia sesuai kebutuhan, mulai dari
+          pengolahan lahan hingga pendukung panen.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+
+      <!-- Top: 4-column grid -->
+      <div class="footer__grid">
+
+        <!-- Brand -->
+        <div class="footer__col footer__col--brand">
+          <img src="img/logo.png" alt="Tandoor Logo" class="logo-img logo-img--footer" />
+          <p class="footer__tagline">
+            Platform penyewaan alat pertanian yang praktis, aman, dan terpercaya untuk petani Indonesia.
+          </p>
+          <div class="footer__socials">
+            <a href="#" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="social-btn" aria-label="Twitter/X"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="social-btn" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          </div>
+        </div>
+
+        <!-- Navigasi -->
+        <div class="footer__col">
+          <h4 class="footer__heading">Navigasi</h4>
+          <ul class="footer__list">
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="peralatan.html">Peralatan</a></li>
+            <li><a href="dashboard.html">Penyewaan Saya</a></li>
+            <li><a href="#">Hubungi Kami</a></li>
+          </ul>
+        </div>
+
+        <!-- Layanan -->
+        <div class="footer__col">
+          <h4 class="footer__heading">Layanan</h4>
+          <ul class="footer__list">
+            <li><a href="#">Sewa Alat</a></li>
+            <li><a href="#">Jadwal Penyewaan</a></li>
+            <li><a href="#">Panduan Penggunaan</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+
+        <!-- Kontak -->
+        <div class="footer__col">
+          <h4 class="footer__heading">Kontak</h4>
+          <ul class="footer__list footer__list--contact">
+            <li>
+              <i class="fa-solid fa-envelope"></i>
+              <span>halo@tandoor.id</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-phone"></i>
+              <span>+62 812-3456-7890</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-location-dot"></i>
+              <span>Jl. Pertanian No. 12,<br/>Bogor, Jawa Barat</span>
+            </li>
+          </ul>
+        </div>
+
+      </div><!-- /.footer__grid -->
+
+      <!-- Divider -->
+      <div class="footer__divider"></div>
+
+      <!-- Bottom bar -->
+      <div class="footer__bottom">
+        <p class="footer__copy">&copy; 2026 Tandoor. Seluruh hak cipta dilindungi.</p>
+        <div class="footer__bottom-links">
+          <a href="#">Kebijakan Privasi</a>
+          <a href="#">Syarat &amp; Ketentuan</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ===== MODAL BACKDROP ===== -->
+  <div class="modal-backdrop" id="modalBackdrop"></div>
+
+  <!-- ===== MODAL: LOGIN ===== -->
+  <div class="modal" id="modalLogin" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <button class="modal__close" id="btnCloseLogin" aria-label="Tutup">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <h2 class="modal__title" id="loginTitle">Masuk</h2>
+    <p class="modal__subtitle">Selamat datang kembali di Tandoor</p>
+
+    <form class="modal__form" id="formLogin" novalidate>
+
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <div class="input-wrap">
+          <span class="input-icon"><i class="fa-regular fa-envelope"></i></span>
+          <input type="email" class="form-input" id="loginEmail" placeholder="Masukkan email Anda" required />
+        </div>
+        <span class="form-error" id="loginEmailErr"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrap">
+          <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+          <input type="password" class="form-input" id="loginPassword" placeholder="Masukkan kata sandi" required />
+          <button type="button" class="input-eye" data-target="loginPassword" aria-label="Tampilkan password">
+            <i class="fa-regular fa-eye"></i>
+          </button>
+        </div>
+        <span class="form-error" id="loginPasswordErr"></span>
+      </div>
+
+      <label class="form-checkbox">
+        <input type="checkbox" id="loginRemember" />
+        <span>Ingat saya</span>
+      </label>
+
+      <button type="submit" class="btn btn--form">Masuk</button>
+    </form>
+
+    <div class="modal__divider"><span>atau</span></div>
+    <p class="modal__switch">Belum punya akun? <button class="modal__switch-btn" id="btnSwitchToRegister">Daftar</button></p>
+  </div>
+
+  <!-- ===== MODAL: REGISTER ===== -->
+  <div class="modal" id="modalRegister" role="dialog" aria-modal="true" aria-labelledby="registerTitle">
+    <button class="modal__close" id="btnCloseRegister" aria-label="Tutup">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <h2 class="modal__title" id="registerTitle">Daftar</h2>
+    <p class="modal__subtitle">Bergabung dengan Tandoor</p>
+
+    <form class="modal__form" id="formRegister" novalidate>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nama Depan <span class="required">*</span></label>
+          <input type="text" class="form-input" id="regFirstName" placeholder="Nama" required />
+          <span class="form-error" id="regFirstNameErr"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Belakang <span class="required">*</span></label>
+          <input type="text" class="form-input" id="regLastName" placeholder="Nama" required />
+          <span class="form-error" id="regLastNameErr"></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email <span class="required">*</span></label>
+        <div class="input-wrap">
+          <span class="input-icon"><i class="fa-regular fa-envelope"></i></span>
+          <input type="email" class="form-input" id="regEmail" placeholder="Masukkan email Anda" required />
+        </div>
+        <span class="form-error" id="regEmailErr"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">No. Telepon <span class="required">*</span></label>
+        <div class="input-wrap">
+          <span class="input-icon"><i class="fa-solid fa-phone"></i></span>
+          <input type="tel" class="form-input" id="regPhone" placeholder="Masukkan nomor telepon" required />
+        </div>
+        <span class="form-error" id="regPhoneErr"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Katasandi <span class="required">*</span></label>
+        <div class="input-wrap">
+          <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+          <input type="password" class="form-input" id="regPassword" placeholder="Buat kata sandi" required />
+          <button type="button" class="input-eye" data-target="regPassword" aria-label="Tampilkan password">
+            <i class="fa-regular fa-eye"></i>
+          </button>
+        </div>
+        <span class="form-error" id="regPasswordErr"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Konfirmasi Kata Sandi <span class="required">*</span></label>
+        <div class="input-wrap">
+          <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+          <input type="password" class="form-input" id="regConfirm" placeholder="Masukkan kata sandi" required />
+          <button type="button" class="input-eye" data-target="regConfirm" aria-label="Tampilkan password">
+            <i class="fa-regular fa-eye"></i>
+          </button>
+        </div>
+        <span class="form-error" id="regConfirmErr"></span>
+      </div>
+
+      <button type="submit" class="btn btn--form">Daftar</button>
+    </form>
+
+    <div class="modal__divider"><span>atau</span></div>
+    <p class="modal__switch">Sudah punya akun? <button class="modal__switch-btn" id="btnSwitchToLogin">Masuk</button></p>
+  </div>
+
+  <!-- ===== MODAL: INFORMASI LAHAN ===== -->
+  <div class="modal modal--wide" id="modalLahan" role="dialog" aria-modal="true" aria-labelledby="lahanTitle">
+    <button class="modal__close" id="btnCloseLahan" aria-label="Tutup">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <h2 class="modal__title" id="lahanTitle">Informasi Lahan</h2>
+    <p class="modal__subtitle">Bantu kami memberikan layanan yang lebih sesuai dengan kebutuhan Anda.</p>
+
+    <form class="modal__form" id="formLahan" novalidate>
+
+      <div class="form-group">
+        <label class="form-label">Nama Lahan <span class="required">*</span></label>
+        <div class="input-wrap">
+          <span class="input-icon"><i class="fa-solid fa-seedling"></i></span>
+          <input type="text" class="form-input" id="lahanNama" placeholder="Masukkan nama lahan Anda" required />
+        </div>
+        <span class="form-error" id="lahanNamaErr"></span>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tipe Lahan <span class="required">*</span></label>
+          <input type="text" class="form-input" id="lahanTipe" placeholder="Lahan" required />
+          <span class="form-error" id="lahanTipeErr"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Luas Lahan <span class="required">*</span></label>
+          <input type="text" class="form-input" id="lahanLuas" placeholder="cth: 250 Hektar" required />
+          <span class="form-error" id="lahanLuasErr"></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Alamat <span class="required">*</span></label>
+        <div class="input-wrap">
+          <span class="input-icon"><i class="fa-solid fa-location-dot"></i></span>
+          <input type="text" class="form-input" id="lahanAlamat" placeholder="Masukkan alamat lahan" required />
+        </div>
+        <span class="form-error" id="lahanAlamatErr"></span>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Kota <span class="required">*</span></label>
+          <input type="text" class="form-input" id="lahanKota" placeholder="Kota" required />
+          <span class="form-error" id="lahanKotaErr"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Provinsi <span class="required">*</span></label>
+          <input type="text" class="form-input" id="lahanProvinsi" placeholder="Provinsi" required />
+          <span class="form-error" id="lahanProvinsiErr"></span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Kode Pos <span class="required">*</span></label>
+          <input type="text" class="form-input" id="lahanKodePos" placeholder="cth: 50125" required />
+          <span class="form-error" id="lahanKodePosErr"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Negara <span class="required">*</span></label>
+          <input type="text" class="form-input" id="lahanNegara" placeholder="Indonesia" required />
+          <span class="form-error" id="lahanNegaraErr"></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Komoditas Utama</label>
+        <input type="text" class="form-input" id="lahanKomoditas" placeholder="cth: Jagung, Kedelai, Padi" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Deskripsi Tambahan</label>
+        <textarea class="form-input form-textarea" id="lahanDeskripsi" placeholder="Ceritakan lebih lanjut mengenai lahan Anda..."></textarea>
+      </div>
+
+      <div class="modal__info-box">
+        <i class="fa-solid fa-circle-info"></i>
+        <p>Informasi ini membantu pemilik alat memahami kebutuhan Anda sehingga dapat memberikan layanan yang lebih baik. Data Anda akan disimpan dengan aman dan hanya dibagikan kepada pemilik alat saat Anda melakukan permintaan penyewaan.</p>
+      </div>
+
+      <div class="modal__actions">
+        <button type="button" class="btn btn--form-outline" id="btnLahanLewati">Lewati Sekarang</button>
+        <button type="submit" class="btn btn--form">Simpan Informasi Lahan</button>
+      </div>
+
+    </form>
+  </div>
+
+  <script src="js/nav.js"></script>
+  <script src="js/index.js"></script>
+
 </body>
 </html>
