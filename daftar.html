@@ -14,7 +14,7 @@
                 <p>Bergabung dengan Tandoor</p>
             </header>
             
-            <form>
+            <form id="registerForm" onsubmit="return validateForm()">
                 <div class="row">
                     <div class="input-group">
                         <label>Nama Depan *</label>
@@ -33,18 +33,31 @@
 
                 <div class="input-group">
                     <label>No. Telepon *</label>
-                    <input type="tel" placeholder="Masukkan nomor telepon" required>
+                    <input type="tel" 
+                           id="phone" 
+                           placeholder="Masukkan nomor telepon" 
+                           pattern="[0-9]+" 
+                           title="Harap masukkan angka saja" 
+                           required>
                 </div>
 
                 <div class="input-group">
                     <label>Katasandi *</label>
-                    <input type="password" placeholder="Buat kata sandi" required>
+                    <input type="password" 
+                           id="password" 
+                           placeholder="Buat kata sandi" 
+                           minlength="8" 
+                           required>
                     <small>Minimal 8 karakter</small>
                 </div>
 
                 <div class="input-group">
                     <label>Konfirmasi Kata Sandi *</label>
-                    <input type="password" placeholder="Masukkan kata sandi" required>
+                    <input type="password" 
+                           id="confirm_password" 
+                           placeholder="Masukkan kata sandi" 
+                           required>
+                    <span id="message" style="font-size: 0.8rem;"></span>
                 </div>
 
                 <button type="submit" class="btn-primary">Daftar</button>
@@ -55,5 +68,23 @@
             <p class="footer-text">Sudah punya akun? <a href="index.html">Masuk</a></p>
         </div>
     </div>
+
+    <script>
+        function validateForm() {
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm_password").value;
+            const message = document.getElementById("message");
+
+            if (password !== confirmPassword) {
+                message.style.color = "red";
+                message.innerHTML = "✘ Kata sandi tidak sama!";
+                return false; // Mencegah form dikirim
+            }
+            
+            message.style.color = "green";
+            message.innerHTML = "✔ Kata sandi cocok";
+            return true; // Form boleh dikirim
+        }
+    </script>
 </body>
 </html>
