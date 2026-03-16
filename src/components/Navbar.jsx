@@ -1,18 +1,18 @@
-import "../styles/Navbar.css"
-import "../styles/Buttons.css"
-import logo from "../assets/logo.png"
+import "../styles/Navbar.css";
+import "../styles/Buttons.css";
+import logo from "../assets/logo.png";
 
 function Navbar({ setPage }) {
   return (
     <header className="navbar">
       <div className="container navbar__inner">
-
+        {/* Bagian Logo */}
         <div className="navbar__logo">
           <img src={logo} alt="Tandoor Logo" className="logo-img" />
         </div>
 
+        {/* Link Navigasi Tengah */}
         <nav className="navbar__links">
-
           <button
             type="button"
             onClick={() => setPage("home")}
@@ -36,26 +36,35 @@ function Navbar({ setPage }) {
           <button type="button" className="nav-link nav-link--btn">
             Hubungi Kami
           </button>
-
         </nav>
 
+        {/* Bagian Auth (Masuk & Daftar) */}
         <div className="navbar__auth">
-          <button type="button" className="btn btn--ghost">
+          <button
+            type="button"
+            className="btn btn--ghost"
+            onClick={() => setPage("login")}
+          >
             Masuk
           </button>
 
-          <button type="button" className="btn btn--primary">
+          <button
+            type="button"
+            className="btn btn--primary"
+            onClick={() => setPage("register")}
+          >
             Daftar
           </button>
         </div>
 
+        {/* Tombol Hamburger untuk Mobile (Penting agar layout tidak berantakan) */}
         <button type="button" className="navbar__hamburger">
           <i className="fa-solid fa-bars"></i>
         </button>
 
-      </div>
+      </div> {/* <-- Ini penutup container yang tadi hilang */}
     </header>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;
