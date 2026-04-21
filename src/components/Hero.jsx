@@ -1,27 +1,28 @@
-import '../styles/Hero.css'
-import '../styles/Buttons.css'
-import heroImg from '../assets/hero.png'
+// src/components/Hero.jsx
+import heroBg from "../assets/hero.png"; 
 
-function Hero() {
+function Hero({ setPage }) { 
   return (
-    <section className="hero" style={{ backgroundImage: `url(${heroImg})` }}>
+    <section className="hero" style={{ backgroundImage: `url(${heroBg})` }}>
       <div className="hero__overlay"></div>
 
-      <div className="hero__content">
-        <h1 className="hero__title">Gerakkan Pertanian</h1>
-
-        <p className="hero__subtitle">
-          Menyewa alat pertanian menjadi semudah memesan
-          <br />
-          layanan online — cepat, transparan, dan efisien.
+      <div className="container hero__content">
+        <h1>Gerakkan Pertanian</h1>
+        {}
+        <p className="hero-description-bold">
+          Menyewa alat pertanian menjadi semudah memesan layanan online — cepat, transparan, dan efisien.
         </p>
-
-        <a href="#" className="btn btn--hero">
+        
+        {}
+        <button 
+          className="btn-mulai" 
+          onClick={() => setPage("login")}
+        >
           Mulai Sekarang
-        </a>
+        </button>
       </div>
     </section>
-  )
+  );
 }
 
-export default Hero
+export default Hero;

@@ -1,69 +1,42 @@
-import "../styles/Navbar.css";
-import "../styles/Buttons.css";
+// src/components/Navbar.jsx
 import logo from "../assets/logo.png";
 
-function Navbar({ setPage }) {
+function Navbar({ setPage, currentPage }) {
   return (
-    <header className="navbar">
+    <nav className="navbar sticky-navbar">
       <div className="container navbar__inner">
-        {/* Bagian Logo */}
-        <div className="navbar__logo">
-          <img src={logo} alt="Tandoor Logo" className="logo-img" />
+        <div className="navbar__logo" onClick={() => setPage("home")}>
+          <img src={logo} alt="Tandoor" className="logo-img" />
         </div>
 
-        {/* Link Navigasi Tengah */}
-        <nav className="navbar__links">
-          <button
-            type="button"
+        <ul className="navbar__menu">
+          <li 
+            className={currentPage === "home" ? "active-link" : "nav-item"} 
             onClick={() => setPage("home")}
-            className="nav-link active"
           >
             Beranda
-          </button>
-
-          <button
-            type="button"
+          </li>
+          <li 
+            className={(currentPage === "equipment" || currentPage === "equipment-detail") ? "active-link" : "nav-item"} 
             onClick={() => setPage("equipment")}
-            className="nav-link"
           >
             Peralatan
-          </button>
-
-          <button type="button" className="nav-link">
+          </li>
+          <li 
+            className={currentPage === "dashboard" ? "active-link" : "nav-item"} 
+            onClick={() => setPage("dashboard")}
+          >
             Penyewaan Saya
-          </button>
+          </li>
+          <li className="nav-item">Hubungi Kami</li>
+        </ul>
 
-          <button type="button" className="nav-link nav-link--btn">
-            Hubungi Kami
-          </button>
-        </nav>
-
-        {/* Bagian Auth (Masuk & Daftar) */}
         <div className="navbar__auth">
-          <button
-            type="button"
-            className="btn btn--ghost"
-            onClick={() => setPage("login")}
-          >
-            Masuk
-          </button>
-
-          <button
-            type="button"
-            className="btn btn--primary"
-            onClick={() => setPage("register")}
-          >
-            Daftar
-          </button>
+          <span className="btn-login" onClick={() => setPage("login")}>Masuk</span>
+          <span className="btn-daftar" onClick={() => setPage("register")}>Daftar</span>
         </div>
-
-        {/* Tombol Hamburger untuk Mobile (Penting agar layout tidak berantakan) */}
-        <button type="button" className="navbar__hamburger">
-          <i className="fa-solid fa-bars"></i>
-        </button>
-
-      </div> {/* <-- Ini penutup container yang tadi hilang */}
-    </header>
+      </div>
+    </nav>
   );
 }
 

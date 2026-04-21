@@ -1,17 +1,21 @@
-import Navbar from "../components/Navbar"
-import Hero from "../components/Hero"
-import Why from "../components/Why"
-import Footer from "../components/Footer"
+// src/pages/Home.jsx
+import Navbar from "../components/Navbar";
+import Hero from "../components/Hero";
+import Why from "../components/Why";
 
-function Home({ setPage }) {
+function Home({ setPage, currentPage }) { 
   return (
-    <>
-      <Navbar setPage={setPage} />
-      <Hero />
+    <div className="homepage">
+      {}
+      <Navbar setPage={setPage} currentPage={currentPage} />
+      
+      {}
+      <Hero setPage={setPage} />
+      
       <Why />
-      <Footer />
-    </>
-  )
+      <div className="footer-placeholder"></div>
+    </div>
+  );
 }
 
-export default Home
+export default Home;
