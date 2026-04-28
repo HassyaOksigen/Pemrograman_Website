@@ -1503,3 +1503,30 @@ html, body, #root {
   background-color: #e5f5eb; /* Hijau */
   color: #1a4d2e;
 }
+
+/* Badge untuk status Ditolak */
+.badge-rejected {
+  background-color: #ffebee; /* Merah sangat muda */
+  color: #d32f2f;            /* Merah tegas */
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Tombol cancel (untuk jaga-jaga kalau belum ada stylingnya) */
+.btn-cancel {
+  background-color: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  color: #333;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+  background-color: #eeeeee;
+  border-color: #bdbdbd;
+}

@@ -7,7 +7,7 @@ import peralatanImg from "../assets/peralatan.png";
 function Dashboard({ setPage, currentPage, session, setEditLandData }) {
   const [activeTab, setActiveTab] = useState("my-rentals");
   const [lands, setLands] = useState([]);
-  const [requests, setRequests] = useState([]); 
+  const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
@@ -24,7 +24,7 @@ function Dashboard({ setPage, currentPage, session, setEditLandData }) {
           .order("created_at", { ascending: false });
         if (error) throw error;
         setLands(data);
-      } else if (activeTab === "requests") {
+      } else {
         const { data, error } = await supabase
           .from("sewa")
           .select("*")
@@ -82,16 +82,12 @@ function Dashboard({ setPage, currentPage, session, setEditLandData }) {
     return Math.ceil(diff / (1000 * 60 * 60 * 24)) + 1;
   };
 
-  // Fungsi Logika Status Dinamis
   const getDynamicStatus = (req) => {
     if (req.status === "Disetujui") {
-      const updatedAt = new Date(req.updated_at); 
+      const updatedAt = new Date(req.updated_at);
       const now = new Date();
       const diffInMinutes = (now - updatedAt) / (1000 * 60);
-
-      if (diffInMinutes < 5) {
-        return "Dikirim";
-      }
+      if (diffInMinutes < 5) return "Dikirim";
       return "Disetujui";
     }
     return req.status;
@@ -116,19 +112,79 @@ function Dashboard({ setPage, currentPage, session, setEditLandData }) {
           <button className={`tab-btn ${activeTab === "profile" ? "active" : ""}`} onClick={() => setActiveTab("profile")}>👤 Profil</button>
         </div>
 
+        {/* --- TAB PENYEWAAN SAYA (Logika Tanggal Otomatis) --- */}
+        {activeTab === "my-rentals" && (
+          <div className="tab-content">
+            <h3 className="section-title-dash">Penyewaan Aktif</h3>
+            {/* Menambahkan display flex dan gap untuk jarak antar kartu */}
+            <div className="active-rent-grid" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {requests.filter(req => {
+                const today = new Date();
+                const endDate = new Date(req.tanggal_selesai);
+                return (req.status === "Disetujui" || req.status === "Aktif" || req.status === "Dikirim") && endDate >= today;
+              }).length > 0 ? (
+                requests
+                  .filter(req => {
+                    const today = new Date();
+                    const endDate = new Date(req.tanggal_selesai);
+                    return (req.status === "Disetujui" || req.status === "Aktif" || req.status === "Dikirim") && endDate >= today;
+                  })
+                  .map((req) => (
+                    <div className="active-card" key={req.id}>
+                      <img src={peralatanImg} alt="alat" className="active-img" />
+                      <div className="active-info">
+                        <div className="title-status">
+                          <h4>{req.alat_disewa}</h4>
+                          <span className="badge-active">Aktif</span>
+                        </div>
+                        <p>{req.tanggal_mulai} sampai {req.tanggal_selesai}</p>
+                        <span className="active-price">Rp {req.total_harga?.toLocaleString("id-ID")}</span>
+                      </div>
+                    </div>
+                  ))
+              ) : (
+                <p>Tidak ada penyewaan aktif.</p>
+              )}
+            </div>
+
+            <h3 className="section-title-dash" style={{ marginTop: "40px" }}>Riwayat Penyewaan</h3>
+            <div className="history-list" style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              {requests.filter(req => {
+                const today = new Date();
+                const endDate = new Date(req.tanggal_selesai);
+                return req.status === "Selesai" || ((req.status === "Disetujui" || req.status === "Aktif") && endDate < today);
+              }).length > 0 ? (
+                requests
+                  .filter(req => {
+                    const today = new Date();
+                    const endDate = new Date(req.tanggal_selesai);
+                    return req.status === "Selesai" || ((req.status === "Disetujui" || req.status === "Aktif") && endDate < today);
+                  })
+                  .map((req) => (
+                    <div className="history-card" key={req.id}>
+                      <h4>{req.alat_disewa}</h4>
+                      <p>Selesai — {req.tanggal_selesai} • {calculateDays(req.tanggal_mulai, req.tanggal_selesai)} hari • Rp {req.total_harga?.toLocaleString("id-ID")}</p>
+                    </div>
+                  ))
+              ) : (
+                <p>Belum ada riwayat penyewaan.</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* --- TAB PERMINTAAN SEWA --- */}
         {activeTab === "requests" && (
           <div className="tab-content">
             <div className="section-header-inline">
               <h3 className="section-title-dash">Permintaan Penyewaan</h3>
               <button className="btn-new-request" onClick={() => setPage("equipment")}>Permintaan Baru</button>
             </div>
-
-            {loading ? (
-              <p>Memuat permintaan...</p>
-            ) : (
-              <div className="request-list">
-                {requests.length > 0 ? (
-                  requests.map((req) => {
+            {loading ? <p>Memuat...</p> : (
+              <div className="request-list" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                {requests
+                  .filter(r => r.status === "pending" || r.status === "Menunggu Konfirmasi" || r.status === "Ditolak")
+                  .map((req) => {
                     const currentStatus = getDynamicStatus(req);
                     return (
                       <div className="request-card" key={req.id}>
@@ -136,23 +192,21 @@ function Dashboard({ setPage, currentPage, session, setEditLandData }) {
                         <div className="request-info">
                           <div className="title-status">
                             <h4>{req.alat_disewa}</h4>
-                            <span className={`badge-${
-                              currentStatus === 'Menunggu Konfirmasi' || currentStatus === 'pending' ? 'pending' : 
-                              currentStatus === 'Ditolak' ? 'rejected' : 'active'
-                            }`}>
+                            <span className={`badge-${currentStatus === "Menunggu Konfirmasi" || currentStatus === "pending" ? "pending" : currentStatus === "Ditolak" ? "rejected" : "active"}`}>
                               {currentStatus}
                             </span>
                           </div>
                           <p>Diajukan untuk {req.tanggal_mulai} • Durasi {calculateDays(req.tanggal_mulai, req.tanggal_selesai)} hari</p>
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "10px" }}>
                             <span className="active-price">Rp {req.total_harga?.toLocaleString("id-ID") || "0"}</span>
-
-                            {currentStatus === "pending" || currentStatus === "Menunggu Konfirmasi" ? (
+                            {currentStatus === "Menunggu Konfirmasi" || currentStatus === "pending" ? (
                               <div className="request-actions">
                                 <button className="btn-cancel" onClick={() => handleCancelRequest(req.id)}>Batalkan Permintaan</button>
                               </div>
                             ) : currentStatus === "Ditolak" ? (
-                                <span style={{ color: '#ff4d4d', fontWeight: 'bold' }}>Permintaan Ditolak</span>
+                              <div className="status-rejected-text">
+                                <span style={{ color: "#d32f2f", fontWeight: "600", fontSize: "14px" }}>Permintaan Tidak Disetujui</span>
+                              </div>
                             ) : (
                               <span style={{ fontWeight: "bold", color: "#1a4d2e" }}>SHP-00{req.id}</span>
                             )}
@@ -160,15 +214,13 @@ function Dashboard({ setPage, currentPage, session, setEditLandData }) {
                         </div>
                       </div>
                     );
-                  })
-                ) : (
-                  <p>Belum ada permintaan sewa.</p>
-                )}
+                  })}
               </div>
             )}
           </div>
         )}
 
+        {/* --- TAB PROFIL --- */}
         {activeTab === "profile" && (
           <div className="profile-tab-content">
             <div className="profile-info-card-horizontal">
@@ -195,13 +247,6 @@ function Dashboard({ setPage, currentPage, session, setEditLandData }) {
                     <p>Email</p>
                   </div>
                 </div>
-                <div className="info-item-flex">
-                  <span className="info-icon-green">📍</span>
-                  <div className="info-detail">
-                    <strong>{userData?.address || "-"}</strong>
-                    <p>Alamat</p>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -210,10 +255,8 @@ function Dashboard({ setPage, currentPage, session, setEditLandData }) {
               <button className="btn-tambah-lahan" onClick={() => { if (typeof setEditLandData === "function") setEditLandData(null); setPage("landinfo"); }}>Tambah Lahan</button>
             </div>
 
-            {loading ? (
-              <p>Memuat lahan...</p>
-            ) : (
-              <div className="lahan-grid-cards">
+            {loading ? <p>Memuat lahan...</p> : (
+              <div className="lahan-grid-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
                 {lands.map((land) => (
                   <div className="lahan-mini-card" key={land.id}>
                     <div className="lahan-card-header">
