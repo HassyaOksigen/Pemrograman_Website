@@ -1,7 +1,8 @@
-import { useState } from "react";
+// src/pages/LandInfo.jsx
+import { useState, useEffect } from "react";
+import { supabase } from "../supabaseClient"; 
 
-function LandInfo({ setPage }) {
-  // 1. State untuk menampung data input
+function LandInfo({ setPage, session, editLandData, setEditLandData }) {
   const [formData, setFormData] = useState({
     landName: "",
     landType: "",
@@ -15,8 +16,26 @@ function LandInfo({ setPage }) {
     description: ""
   });
 
-  // 2. State untuk melacak kolom mana yang error
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  // Efek untuk mengisi form otomatis jika sedang dalam mode EDIT
+  useEffect(() => {
+    if (editLandData) {
+      setFormData({
+        landName: editLandData.nama_lahan || "",
+        landType: editLandData.tipe_lahan || "",
+        landSize: editLandData.luas_lahan?.toString() || "",
+        address: editLandData.alamat || "",
+        city: editLandData.kota || "",
+        province: editLandData.provinsi || "",
+        zipCode: editLandData.kode_pos?.toString() || "",
+        country: editLandData.negara || "",
+        commodity: editLandData.komoditas_utama || "",
+        description: editLandData.deskripsi_tambah || ""
+      });
+    }
+  }, [editLandData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,7 +45,12 @@ function LandInfo({ setPage }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleClose = () => {
+    if (setEditLandData) setEditLandData(null);
+    setPage("dashboard");
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let tempErrors = {};
     
@@ -36,12 +60,9 @@ function LandInfo({ setPage }) {
     ];
 
     requiredFields.forEach((field) => {
-      if (!formData[field]) {
-        tempErrors[field] = true;
-      }
+      if (!formData[field]) tempErrors[field] = true;
     });
 
-    // Validasi Angka untuk Luas Lahan
     if (formData.landSize && isNaN(formData.landSize)) {
       tempErrors.landSize = true;
     }
@@ -49,32 +70,75 @@ function LandInfo({ setPage }) {
     setErrors(tempErrors);
 
     if (Object.keys(tempErrors).length === 0) {
-      console.log("Data Berhasil Disimpan:", formData);
-      setPage("home"); 
+      setLoading(true);
+
+      try {
+        const userId = session?.user?.id;
+        if (!userId) throw new Error("Sesi berakhir, silakan login kembali.");
+
+        const payload = { 
+          nama_lahan: formData.landName,
+          tipe_lahan: formData.landType,
+          luas_lahan: parseFloat(formData.landSize),
+          alamat: formData.address,
+          kota: formData.city,
+          provinsi: formData.province,
+          kode_pos: formData.zipCode,
+          negara: formData.country,
+          komoditas_utama: formData.commodity,
+          deskripsi_tambah: formData.description
+        };
+
+        if (editLandData) {
+          // --- LOGIKA UPDATE ---
+          const { error: updateError } = await supabase
+            .from('lahan')
+            .update(payload)
+            .eq('id', editLandData.id);
+
+          if (updateError) throw updateError;
+          alert("Perubahan lahan berhasil disimpan!");
+        } else {
+          // --- LOGIKA INSERT ---
+          const { error: insertError } = await supabase
+            .from('lahan')
+            .insert([{ ...payload, user_id: userId }]);
+
+          if (insertError) throw insertError;
+          alert("Informasi lahan baru berhasil disimpan!");
+        }
+
+        handleClose();
+
+      } catch (error) {
+        alert("Gagal menyimpan data: " + error.message);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
   return (
     <div className="auth-overlay">
       <div className="auth-modal land-modal">
-        <button className="close-btn" onClick={() => setPage("home")}>✕</button>
+        <button className="close-btn" onClick={handleClose}>✕</button>
         
-        <h2 className="auth-title">Informasi Lahan</h2>
-        <p className="auth-subtitle">Bantu kami memberikan layanan yang lebih sesuai dengan kebutuhan Anda.</p>
+        <h2 className="auth-title">{editLandData ? "Edit Informasi Lahan" : "Informasi Lahan"}</h2>
+        <p className="auth-subtitle">Pastikan data lahan Anda akurat untuk layanan yang lebih maksimal.</p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           
-          {}
           <h4 className="section-title">Informasi Dasar</h4>
           <label>Nama Lahan <span className="red">*</span></label>
           <div className={`input-group ${errors.landName ? "error-border" : ""}`}>
-            <span className="icon">📧</span>
+            <span className="icon">🌱</span>
             <input 
               type="text" 
               name="landName"
               placeholder="Masukkan nama lahan" 
               value={formData.landName}
               onChange={handleChange}
+              disabled={loading}
             />
           </div>
 
@@ -85,9 +149,10 @@ function LandInfo({ setPage }) {
                 <input 
                   type="text" 
                   name="landType"
-                  placeholder="Lahan" 
+                  placeholder="Contoh: Lahan Basah" 
                   value={formData.landType}
                   onChange={handleChange}
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -98,28 +163,26 @@ function LandInfo({ setPage }) {
                 <input 
                   type="text" 
                   name="landSize"
-                  placeholder="Luas dalam Hektar" 
+                  placeholder="Hektar" 
                   value={formData.landSize}
                   onChange={handleChange}
+                  disabled={loading}
                 />
               </div>
-              {errors.landSize && formData.landSize && isNaN(formData.landSize) && (
-                <p style={{ color: "#ff4d4d", fontSize: "10px", marginTop: "5px", fontWeight: "bold" }}>Harus berupa angka</p>
-              )}
             </div>
           </div>
 
-          {}
           <h4 className="section-title">Lokasi</h4>
-          <label>Alamat <span className="red">*</span></label>
+          <label>Alamat Lengkap <span className="red">*</span></label>
           <div className={`input-group ${errors.address ? "error-border" : ""}`}>
-            <span className="icon">📞</span>
+            <span className="icon">📍</span>
             <input 
               type="text" 
               name="address"
               placeholder="Masukkan alamat lengkap" 
               value={formData.address}
               onChange={handleChange}
+              disabled={loading}
             />
           </div>
 
@@ -127,25 +190,13 @@ function LandInfo({ setPage }) {
             <div className="input-field">
               <label>Kota <span className="red">*</span></label>
               <div className={`input-group ${errors.city ? "error-border" : ""}`}>
-                <input 
-                  type="text" 
-                  name="city"
-                  placeholder="Kota" 
-                  value={formData.city}
-                  onChange={handleChange}
-                />
+                <input type="text" name="city" placeholder="Kota" value={formData.city} onChange={handleChange} disabled={loading} />
               </div>
             </div>
             <div className="input-field">
               <label>Provinsi <span className="red">*</span></label>
               <div className={`input-group ${errors.province ? "error-border" : ""}`}>
-                <input 
-                  type="text" 
-                  name="province"
-                  placeholder="Provinsi" 
-                  value={formData.province}
-                  onChange={handleChange}
-                />
+                <input type="text" name="province" placeholder="Provinsi" value={formData.province} onChange={handleChange} disabled={loading} />
               </div>
             </div>
           </div>
@@ -154,30 +205,17 @@ function LandInfo({ setPage }) {
             <div className="input-field">
               <label>Kode Pos <span className="red">*</span></label>
               <div className={`input-group ${errors.zipCode ? "error-border" : ""}`}>
-                <input 
-                  type="text" 
-                  name="zipCode"
-                  placeholder="Kode Pos" 
-                  value={formData.zipCode}
-                  onChange={handleChange}
-                />
+                <input type="text" name="zipCode" placeholder="Kode Pos" value={formData.zipCode} onChange={handleChange} disabled={loading} />
               </div>
             </div>
             <div className="input-field">
               <label>Negara <span className="red">*</span></label>
               <div className={`input-group ${errors.country ? "error-border" : ""}`}>
-                <input 
-                  type="text" 
-                  name="country"
-                  placeholder="Negara" 
-                  value={formData.country}
-                  onChange={handleChange}
-                />
+                <input type="text" name="country" placeholder="Negara" value={formData.country} onChange={handleChange} disabled={loading} />
               </div>
             </div>
           </div>
 
-          {}
           <h4 className="section-title">Operasional Lahan</h4>
           <label>Komoditas Utama</label>
           <div className="input-group">
@@ -187,6 +225,7 @@ function LandInfo({ setPage }) {
               placeholder="Contoh: Padi, Jagung" 
               value={formData.commodity}
               onChange={handleChange}
+              disabled={loading}
             />
           </div>
 
@@ -197,16 +236,15 @@ function LandInfo({ setPage }) {
               placeholder="Ceritakan sedikit tentang lahan Anda..."
               value={formData.description}
               onChange={handleChange}
+              disabled={loading}
             ></textarea>
           </div>
 
-          <div className="info-box">
-            <p>Informasi ini membantu pemilik alat memahami kebutuhan Anda sehingga dapat memberikan layanan yang lebih sesuai.</p>
-          </div>
-
           <div className="btn-group-row">
-            <button type="button" className="btn-outline" onClick={() => setPage("home")}>Lewati Sekarang</button>
-            <button type="submit" className="btn-submit">Simpan Informasi Lahan</button>
+            <button type="button" className="btn-outline" onClick={handleClose}>Batal</button>
+            <button type="submit" className="btn-submit" disabled={loading}>
+              {loading ? "Menyimpan..." : (editLandData ? "Simpan Perubahan" : "Simpan Lahan")}
+            </button>
           </div>
         </form>
       </div>

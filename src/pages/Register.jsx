@@ -1,4 +1,6 @@
 import { useState } from "react";
+// 1. Import library supabase yang sudah kamu buat di src/supabaseClient.js
+import { supabase } from "../supabaseClient"; 
 
 function Register({ setPage }) {
   const [formData, setFormData] = useState({
@@ -13,6 +15,7 @@ function Register({ setPage }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false); // State untuk loading
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,36 +25,63 @@ function Register({ setPage }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  // 2. Ubah menjadi async function
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let tempErrors = {};
 
-    // 1. Validasi: Semua kolom wajib diisi
+    // Validasi input (Sama seperti kodemu sebelumnya)
     Object.keys(formData).forEach((key) => {
       if (!formData[key]) tempErrors[key] = true;
     });
 
-    // 2. Validasi Nomor Telepon (Harus awalan 0, minimal 10 angka)
     const phoneRegex = /^0[0-9]{9,13}$/;
     if (formData.phone && !phoneRegex.test(formData.phone)) {
       tempErrors.phone = true;
     }
 
-    // 3. Validasi Kata Sandi (Minimal 8 karakter)
     if (formData.password && formData.password.length < 8) {
       tempErrors.password = true;
     }
 
-    // 4. Validasi Konfirmasi Sandi (Harus sama)
     if (formData.password !== formData.confirmPassword) {
       tempErrors.confirmPassword = true;
     }
 
     setErrors(tempErrors);
 
+    // 3. Jika tidak ada error validasi, kirim ke Supabase
     if (Object.keys(tempErrors).length === 0) {
-      console.log("Registrasi Berhasil:", formData);
-      setPage("login"); 
+      setLoading(true); // Mulai loading
+
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            // Menyimpan data tambahan ke user_metadata
+            data: {
+              first_name: formData.firstName,
+              last_name: formData.lastName,
+              phone: formData.phone,
+            }
+          }
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        // Jika berhasil
+        alert("Registrasi Berhasil! Silakan cek email kamu untuk verifikasi.");
+        console.log("User terdaftar:", data);
+        setPage("login"); 
+
+      } catch (error) {
+        alert("Terjadi kesalahan: " + error.message);
+      } finally {
+        setLoading(false); // Matikan loading
+      }
     }
   };
 
@@ -74,6 +104,7 @@ function Register({ setPage }) {
                   placeholder="Nama" 
                   value={formData.firstName}
                   onChange={handleChange}
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -86,6 +117,7 @@ function Register({ setPage }) {
                   placeholder="Nama" 
                   value={formData.lastName}
                   onChange={handleChange}
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -100,6 +132,7 @@ function Register({ setPage }) {
               placeholder="Masukkan email Anda" 
               value={formData.email}
               onChange={handleChange}
+              disabled={loading}
             />
           </div>
 
@@ -112,6 +145,7 @@ function Register({ setPage }) {
               placeholder="Contoh: 08123456789" 
               value={formData.phone}
               onChange={handleChange}
+              disabled={loading}
             />
           </div>
 
@@ -124,8 +158,9 @@ function Register({ setPage }) {
               placeholder="Buat kata sandi" 
               value={formData.password}
               onChange={handleChange}
+              disabled={loading}
             />
-            <span className="eye-icon" onClick={() => setShowPassword(!showPassword)} style={{ cursor: "pointer" }}>
+            <span className="eye-icon" onClick={() => !loading && setShowPassword(!showPassword)} style={{ cursor: "pointer" }}>
               {showPassword ? "👁️‍🗨️" : "👁️"}
             </span>
           </div>
@@ -140,13 +175,16 @@ function Register({ setPage }) {
               placeholder="Masukkan kata sandi" 
               value={formData.confirmPassword}
               onChange={handleChange}
+              disabled={loading}
             />
-            <span className="eye-icon" onClick={() => setShowConfirmPassword(!showConfirmPassword)} style={{ cursor: "pointer" }}>
+            <span className="eye-icon" onClick={() => !loading && setShowConfirmPassword(!showConfirmPassword)} style={{ cursor: "pointer" }}>
               {showConfirmPassword ? "👁️‍🗨️" : "👁️"}
             </span>
           </div>
 
-          <button type="submit" className="btn-submit">Daftar</button>
+          <button type="submit" className="btn-submit" disabled={loading}>
+            {loading ? "Memproses..." : "Daftar"}
+          </button>
         </form>
 
         <div className="auth-divider">
@@ -154,7 +192,7 @@ function Register({ setPage }) {
         </div>
 
         <p className="auth-footer">
-          Sudah punya akun? <span className="green-link" onClick={() => setPage("login")}>Masuk</span>
+          Sudah punya akun? <span className="green-link" onClick={() => !loading && setPage("login")}>Masuk</span>
         </p>
       </div>
     </div>

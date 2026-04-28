@@ -1,232 +1,194 @@
+// src/pages/RentForm.jsx
 import { useState } from "react";
+import { supabase } from "../supabaseClient";
 
-function RentForm({ setPage }) {
-  // 1. State untuk data form
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    farmName: "",
-    duration: "",
-    startDate: "",
-    endDate: "",
-    address: "",
-    isAgreed: false
-  });
-
-  // 2. State untuk melacak error
+function RentForm({ setPage, session, rentData, setRentData }) {
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const HARGA_PER_HARI = 50000;
+
+  // --- 1. FUNGSI KHUSUS UNTUK RESET DAN TUTUP (Tombol X dan Batal) ---
+  const handleForceResetAndClose = () => {
+    setRentData({
+      startDate: "",
+      endDate: "",
+      deliveryAddress: "",
+      note: "",
+      isAgreed: false,
+    });
+    setPage("equipment-detail");
+  };
+
+  // --- 2. FUNGSI UNTUK PINDAH KE TERMS (Tanpa Reset) ---
+  const handleGoToTerms = () => {
+    setPage("terms");
+  };
+
+  const calculateTotalPrice = () => {
+    if (!rentData.startDate || !rentData.endDate) return 0;
+    const start = new Date(rentData.startDate);
+    const end = new Date(rentData.endDate);
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    return diffDays * HARGA_PER_HARI;
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value
-    });
-    if (errors[name]) {
-      setErrors({ ...errors, [name]: false });
+    let newValue = type === "checkbox" ? checked : value;
+    const today = new Date().toISOString().split("T")[0];
+
+    if (name === "startDate" && value < today) {
+      alert("Tanggal mulai tidak boleh tanggal yang sudah lewat!");
+      return;
     }
+    
+    if (name === "endDate" && rentData.startDate && value < rentData.startDate) {
+      alert("Tanggal selesai tidak boleh lebih awal dari tanggal mulai.");
+      return;
+    }
+
+    setRentData((prev) => ({ ...prev, [name]: newValue }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: false }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let tempErrors = {};
 
-    const requiredFields = [
-      "firstName", "lastName", "email", "phone", 
-      "duration", "startDate", "endDate", "address"
-    ];
-
-    requiredFields.forEach((field) => {
-      if (!formData[field]) {
-        tempErrors[field] = true;
-      }
-    });
-
-    const phoneRegex = /^0[0-9]{9,13}$/;
-    if (formData.phone && !phoneRegex.test(formData.phone)) {
-      tempErrors.phone = true;
-    }
-
-    if (!formData.isAgreed) {
-      tempErrors.isAgreed = true;
-    }
+    if (!rentData.startDate) tempErrors.startDate = true;
+    if (!rentData.endDate) tempErrors.endDate = true;
+    if (!rentData.deliveryAddress) tempErrors.deliveryAddress = true;
+    if (!rentData.isAgreed) tempErrors.isAgreed = true;
 
     setErrors(tempErrors);
 
     if (Object.keys(tempErrors).length === 0) {
-      console.log("Pengajuan Sewa Berhasil:", formData);
-      setPage("payment");
+      setLoading(true);
+      try {
+        const userId = session?.user?.id;
+        const firstName = session?.user?.user_metadata?.first_name || "User";
+
+        if (!userId) throw new Error("Sesi tidak ditemukan.");
+
+        // GUNAKAN .insert() AGAR SELALU JADI DATA BARU DI SUPABASE
+        const { error } = await supabase.from("sewa").insert([
+          {
+            user_id: userId,
+            nama_penyewa: firstName,
+            tanggal_mulai: rentData.startDate,
+            tanggal_selesai: rentData.endDate,
+            alamat_pengantaran: rentData.deliveryAddress,
+            catatan_tambahan: rentData.note,
+            alat_disewa: "John Deere 5075E Tractor",
+            status: "Menunggu Konfirmasi",
+            total_harga: calculateTotalPrice(),
+          },
+        ]);
+
+        if (error) throw error;
+        setPage("payment");
+      } catch (err) {
+        alert("Gagal memproses: " + err.message);
+      } finally {
+        setLoading(false);
+      }
     }
   };
+
+  const firstName = session?.user?.user_metadata?.first_name || "User";
+  const userEmail = session?.user?.email || "";
 
   return (
     <div className="auth-overlay">
       <div className="auth-modal rent-modal">
-        <button className="close-btn" onClick={() => setPage("equipment-detail")}>✕</button>
+        {/* KLIK X AKAN RESET DATA */}
+        <button className="close-btn" onClick={handleForceResetAndClose} disabled={loading}>✕</button>
 
-        <h2 className="auth-title">Pengajuan Sewa</h2>
+        <h2 className="auth-title">Formulir Pengajuan Sewa</h2>
         <p className="auth-subtitle">John Deere 5075E Tractor</p>
 
+        <div style={{ background: '#eef5f0', padding: '15px', borderRadius: '8px', marginBottom: '20px', textAlign: 'center', border: '1px dashed #1a4d2e', marginTop: '15px' }}>
+          <span style={{ fontSize: '14px', color: '#666' }}>Estimasi Biaya Sewa: </span>
+          <strong style={{ fontSize: '18px', color: '#1a4d2e' }}>
+            Rp {calculateTotalPrice().toLocaleString('id-ID')}
+          </strong>
+        </div>
+
         <form className="auth-form" onSubmit={handleSubmit}>
-          
-          <h4 className="section-title-small">Informasi Penyewa</h4>
-          <div className="input-row">
-            <div className="input-field">
-              <label>Nama Depan <span className="red">*</span></label>
-              <div className={`input-group ${errors.firstName ? "error-border" : ""}`}>
-                <input 
-                  type="text" 
-                  name="firstName"
-                  placeholder="Nama" 
-                  value={formData.firstName}
-                  onChange={handleChange}
-                />
-              </div>
+          <div className="form-section-header">
+            <h3 style={{ fontSize: "16px", marginBottom: "10px", color: "#1a4d2e", fontWeight: '600' }}>
+              Informasi Penyewa
+            </h3>
+          </div>
+
+          <div className="user-info-statis" style={{ background: "#f8faf9", padding: "15px", borderRadius: "8px", marginBottom: "20px", border: "1px solid #e0e6e2" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "5px" }}>
+              <span style={{ color: "#666", fontSize: "14px" }}>Nama:</span>
+              <span style={{ fontWeight: "600", fontSize: "14px" }}>{firstName}</span>
             </div>
-            <div className="input-field">
-              <label>Nama Belakang <span className="red">*</span></label>
-              <div className={`input-group ${errors.lastName ? "error-border" : ""}`}>
-                <input 
-                  type="text" 
-                  name="lastName"
-                  placeholder="Nama" 
-                  value={formData.lastName}
-                  onChange={handleChange}
-                />
-              </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span style={{ color: "#666", fontSize: "14px" }}>Email:</span>
+              <span style={{ fontWeight: "600", fontSize: "14px" }}>{userEmail}</span>
             </div>
           </div>
 
-          <div className="input-row">
-            <div className="input-field">
-              <label>Email <span className="red">*</span></label>
-              <div className={`input-group ${errors.email ? "error-border" : ""}`}>
-                <input 
-                  type="email" 
-                  name="email"
-                  placeholder="Email" 
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            <div className="input-field">
-              <label>No. HP <span className="red">*</span></label>
-              <div className={`input-group ${errors.phone ? "error-border" : ""}`}>
-                <input 
-                  type="tel" 
-                  name="phone"
-                  placeholder="Contoh: 0812345" 
-                  value={formData.phone}
-                  onChange={handleChange}
-                />
-              </div>
+          <hr className="form-divider" style={{ margin: "20px 0", border: "0", borderTop: "1px solid #eee" }} />
+
+          <div className="input-field">
+            <label>Tanggal Mulai Sewa <span className="red">*</span></label>
+            <div className={`input-group ${errors.startDate ? "error-border" : ""}`}>
+              <input type="date" name="startDate" value={rentData.startDate} onChange={handleChange} disabled={loading} />
             </div>
           </div>
 
-          <label>Nama Pertanian / Usaha</label>
-          <div className="input-group">
-            <input 
-              type="text" 
-              name="farmName"
-              placeholder="Nama Pertanian" 
-              value={formData.farmName}
-              onChange={handleChange}
-            />
-          </div>
-
-          <h4 className="section-title-small">Detail Sewa</h4>
-          <label>Durasi Sewa <span className="red">*</span></label>
-          <div className={`input-group ${errors.duration ? "error-border" : ""}`}>
-            <input 
-              type="text" 
-              name="duration"
-              placeholder="Jumlah Hari" 
-              value={formData.duration}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="input-row">
-            <div className="input-field">
-              <label>Tanggal Mulai <span className="red">*</span></label>
-              <div className={`input-group ${errors.startDate ? "error-border" : ""}`}>
-                <input 
-                  type="date" 
-                  name="startDate"
-                  value={formData.startDate}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            <div className="input-field">
-              <label>Tanggal Selesai <span className="red">*</span></label>
-              <div className={`input-group ${errors.endDate ? "error-border" : ""}`}>
-                <input 
-                  type="date" 
-                  name="endDate"
-                  value={formData.endDate}
-                  onChange={handleChange}
-                />
-              </div>
+          <div className="input-field">
+            <label>Tanggal Selesai Sewa <span className="red">*</span></label>
+            <div className={`input-group ${errors.endDate ? "error-border" : ""}`}>
+              <input type="date" name="endDate" value={rentData.endDate} onChange={handleChange} disabled={loading} />
             </div>
           </div>
 
-          <label>Alamat Pengantaran <span className="red">*</span></label>
-          <div className={`input-group ${errors.address ? "error-border" : ""}`}>
-            <input 
-              type="text" 
-              name="address"
-              placeholder="Jl. Indah" 
-              value={formData.address}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="estimation-box">
-            <div className="est-text">
-              <span className="est-label">Estimasi Harga</span>
-              <span className="est-sub">Per Hari</span>
+          <div className="input-field">
+            <label>Alamat Pengantaran <span className="red">*</span></label>
+            <div className={`input-group ${errors.deliveryAddress ? "error-border" : ""}`}>
+              <textarea name="deliveryAddress" placeholder="Jl. Indah..." value={rentData.deliveryAddress} onChange={handleChange} rows="2" disabled={loading} />
             </div>
-            <span className="est-price">Rp 1.000</span>
           </div>
 
-          <div className={`agreement-row ${errors.isAgreed ? "error-text-bold" : ""}`}>
-            <input 
-              type="checkbox" 
-              id="agree" 
-              name="isAgreed"
-              checked={formData.isAgreed}
-              onChange={handleChange}
-            />
-            <label htmlFor="agree">
-              Saya menyetujui{" "}
-              <span
-                className="green-text"
-                onClick={() => setPage("terms")}
-                style={{ cursor: "pointer", fontWeight: "600", textDecoration: "underline" }}
-              >
-                Syarat dan Ketentuan
-              </span>{" "}
-              dan memahami bahwa pembayaran diperlukan sebelum alat dikirim.
+          <div className="input-field">
+            <label>Catatan Tambahan (Opsional)</label>
+            <div className="input-group">
+              <input type="text" name="note" placeholder="Contoh: Kirim sebelum jam 9 Pagi" value={rentData.note} onChange={handleChange} disabled={loading} />
+            </div>
+          </div>
+
+          <div className="terms-checkbox" style={{ marginTop: "15px", display: "flex", alignItems: "flex-start", gap: "10px" }}>
+            <input type="checkbox" name="isAgreed" id="isAgreed" checked={rentData.isAgreed} onChange={handleChange} style={{ marginTop: "4px" }} disabled={loading} />
+            <label htmlFor="isAgreed" style={{ fontSize: "12px", lineHeight: "1.4", color: errors.isAgreed ? 'red' : '#555' }}>
+              Saya menyetujui <span className="green-link" onClick={handleGoToTerms} style={{ cursor: "pointer", fontWeight: 'bold' }}>Syarat dan Ketentuan</span> dan memahami bahwa pembayaran diperlukan sebelum alat dikirim.
             </label>
           </div>
 
-          <div className="btn-group-row">
-            <button
-              type="button"
-              className="btn-outline"
-              onClick={() => setPage("equipment-detail")}
+          <div className="form-actions" style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+            {/* KLIK BATAL AKAN RESET DATA */}
+            <button 
+              type="button" 
+              className="btn-cancel" 
+              onClick={handleForceResetAndClose} 
+              disabled={loading} 
+              style={{ flex: 1, padding: "12px", borderRadius: "8px", border: "1px solid #ddd", background: "white" }}
             >
               Batal
             </button>
-            <button
-              type="submit"
-              className="btn-submit"
+            <button 
+              type="submit" 
+              className="btn-submit" 
+              disabled={loading} 
+              style={{ flex: 3, padding: "12px", borderRadius: "8px", border: "none", background: loading ? "#ccc" : "#1a4d2e", color: "white", fontWeight: "600" }}
             >
-              Lanjut ke Pembayaran
+              {loading ? "Mengirim..." : "Lanjut ke Pembayaran"}
             </button>
           </div>
         </form>

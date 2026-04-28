@@ -3,13 +3,10 @@ import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import Why from "../components/Why";
 
-function Home({ setPage, currentPage }) { 
+function Home({ setPage, currentPage, session }) {
   return (
     <div className="homepage">
-      {}
-      <Navbar setPage={setPage} currentPage={currentPage} />
-      
-      {}
+      <Navbar setPage={setPage} currentPage={currentPage} session={session}/>
       <Hero setPage={setPage} />
       
       <Why />
@@ -17,5 +14,6 @@ function Home({ setPage, currentPage }) {
     </div>
   );
 }
+
 
 export default Home;

@@ -2,13 +2,12 @@
 import Navbar from "../components/Navbar";
 import peralatanImg from "../assets/peralatan.png";
 
-function EquipmentDetail({ setPage }) {
+function EquipmentDetail({ setPage, currentPage, session }) {
   return (
     <div className="detail-page">
-      <Navbar setPage={setPage} currentPage="peralatan" />
+      <Navbar setPage={setPage} currentPage="peralatan" session={session}/>
 
       <div className="container">
-        {}
         <div className="back-link" onClick={() => setPage("equipment")}>
           <span>← Kembali</span>
         </div>

@@ -1,37 +1,67 @@
+// src/pages/Login.jsx
 import { useState } from "react";
+import { supabase } from "../supabaseClient"; 
 
 function Login({ setPage }) {
-  // 1. State untuk input dan fitur-fitur baru
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // 2. Validasi Sederhana: Contoh jika email tidak mengandung '@' atau password kurang dari 6
-    if (!email.includes("@") || password.length < 6) {
-      setError(true);
-      return; 
-    }
-
+    setLoading(true);
     setError(false);
-    setPage("landinfo"); 
+    setErrorMessage("");
+    
+    try {
+      const { data, error: supabaseError } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
+
+      if (supabaseError) throw supabaseError;
+
+      // LOGIN BERHASIL
+      console.log("Login Berhasil");
+      
+      /* PENTING: Kita langsung arahkan ke 'dashboard'. 
+         Logika di App.jsx akan mendeteksi perubahan session 
+         dan mengunci user agar tidak bisa balik ke 'login' atau 'landinfo'.
+      */
+      setPage("home"); 
+
+    } catch (err) {
+      setError(true);
+      if (err.message === "Invalid login credentials") {
+        setErrorMessage("Email atau password salah.");
+      } else {
+        setErrorMessage(err.message);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="auth-overlay">
       <div className="auth-modal">
-        <button className="close-btn" onClick={() => setPage("home")}>✕</button>
+        {/* Tombol Close: Tidak bisa diklik saat sedang loading */}
+        <button 
+          className="close-btn" 
+          onClick={() => !loading && setPage("home")}
+        >
+          ✕
+        </button>
         
         <h2 className="auth-title">Masuk</h2>
         <p className="auth-subtitle">Selamat datang kembali di Tandoor</p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <label>Email</label>
-          {}
-          <div className={`input-group ${error && !email.includes("@") ? "error-border" : ""}`}>
+          <div className={`input-group ${error ? "error-border" : ""}`}>
             <span className="icon">📧</span>
             <input 
               type="email" 
@@ -39,44 +69,39 @@ function Login({ setPage }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required 
+              disabled={loading}
             />
           </div>
 
           <label>Password</label>
-          <div className={`input-group ${error && password.length < 6 ? "error-border" : ""}`}>
+          <div className={`input-group ${error ? "error-border" : ""}`}>
             <span className="icon">🔒</span>
             <input 
-              type={showPassword ? "text" : "password"} // Logika ganti tipe input
+              type={showPassword ? "text" : "password"} 
               placeholder="Masukkan kata sandi" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required 
+              disabled={loading}
             />
-            {}
             <span 
               className="eye-icon" 
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={() => !loading && setShowPassword(!showPassword)}
               style={{ cursor: "pointer" }}
             >
               {showPassword ? "👁️‍🗨️" : "👁️"}
             </span>
           </div>
 
-          {}
           {error && (
             <p style={{ color: "#ff4d4d", fontSize: "12px", marginTop: "-10px", fontWeight: "bold" }}>
-              Email atau password tidak sesuai ketentuan.
+              {errorMessage}
             </p>
           )}
 
-          <div className="auth-extra">
-            <label className="remember-me">
-              <input type="checkbox" /> Ingat saya
-            </label>
-            <span className="forgot-pw">Lupa kata sandi?</span>
-          </div>
-
-          <button type="submit" className="btn-submit">Masuk</button>
+          <button type="submit" className="btn-submit" disabled={loading}>
+            {loading ? "Memproses..." : "Masuk"}
+          </button>
         </form>
 
         <div className="auth-divider">
@@ -84,7 +109,7 @@ function Login({ setPage }) {
         </div>
 
         <p className="auth-footer">
-          Belum punya akun? <span className="green-link" onClick={() => setPage("register")}>Daftar</span>
+          Belum punya akun? <span className="green-link" onClick={() => !loading && setPage("register")}>Daftar</span>
         </p>
       </div>
     </div>
